@@ -1,54 +1,92 @@
-name: CD - Deploy to EC2
+name: CD with Gradle and SSH Deploy
 
 on:
   push:
     branches:
-      - main
+      - 'develop'
+      - 'main'
+  pull_request:
+    branches:
+      - 'develop'
+      - 'main'
+
+permissions:
+  contents: read
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 🧾 Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: ☕ Set up JDK 21
+      - name: ☕️ Set up JDK 21
         uses: actions/setup-java@v3
         with:
           java-version: '21'
           distribution: 'temurin'
+          server-id: github
+          setting-path: ${{ github.workspace }}
 
-      - name: 🐘 Grant permission for gradlew
+      - name: 🐘 Cache Gradle dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            gradle-${{ runner.os }}-
+
+      - name: 👏🏻 Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: 🧪 Build without test
-        run: ./gradlew clean build -x test
+      - name: 🐘 Build with Gradle (without test)
+        run: ./gradlew clean build -x test --stacktrace
 
       - name: 📦 Rename jar
         run: |
           JAR_FILE=$(ls build/libs/*.jar | head -n 1)
           mv "$JAR_FILE" build/libs/dopamine-market.jar
 
-      - name: ✈️ Upload jar to EC2
+      - name: 🫴🏻 Get Public IP
+        id: ip
+        uses: haythem/public-ip@v1.3
+
+      - name: 🪪 Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: 'ap-northeast-2'
+
+      - name: ➕ Add GitHub Actions IP to EC2 Security Group
+        run: |
+          aws ec2 authorize-security-group-ingress \
+              --group-id ${{ secrets.SECURITY_GROUP_ID }} \
+              --protocol tcp \
+              --port ${{ secrets.EC2_PORT }} \
+              --cidr ${{ steps.ip.outputs.ipv4 }}/32
+
+      - name: ✉️ Upload JAR to EC2
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_KEY }}
-          port: 22
+          port: ${{ secrets.EC2_PORT }}
           source: "build/libs/dopamine-market.jar"
           target: "/home/ec2-user/app/"
 
-      - name: 🚀 SSH Deploy (kill & restart JAR)
+      - name: 🚀 SSH Deploy to EC2 (Kill & Restart JAR)
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_KEY }}
-          port: 22
+          port: ${{ secrets.EC2_PORT }}
           script: |
-            echo "⚙️ Move to app directory"
+            echo "🗂️ Move to app directory"
             cd /home/ec2-user/app
 
             echo "🛑 Killing old process"
@@ -56,3 +94,12 @@ jobs:
 
             echo "🚀 Starting new JAR"
             nohup java -jar dopamine-market.jar > log.out 2>&1 &
+
+      - name: ❌ Remove GitHub Actions IP from EC2 Security Group
+        if: always()
+        run: |
+          aws ec2 revoke-security-group-ingress \
+              --group-id ${{ secrets.SECURITY_GROUP_ID }} \
+              --protocol tcp \
+              --port ${{ secrets.EC2_PORT }} \
+              --cidr ${{ steps.ip.outputs.ipv4 }}/32
