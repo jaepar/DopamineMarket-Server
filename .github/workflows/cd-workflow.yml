@@ -76,7 +76,7 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           port: ${{ secrets.EC2_PORT }}
           source: "build/libs/dopamine-market.jar"
-          target: "/home/ec2-user/app/"
+          target: "/home/ubuntu/app/"
 
       - name: 🚀 SSH Deploy to EC2 (Kill & Restart JAR)
         uses: appleboy/ssh-action@master
