@@ -44,6 +44,6 @@ public class AppControllerAdvice {
     @ExceptionHandler(UserNotFoundException.class)
     public BaseErrorResponse handleUserNotFound(UserNotFoundException e) {
         log.error("[UserNotFoundException]", e);
-        return new BaseErrorResponse(USER_NOT_FOUND, e.getMessage());
+        return new BaseErrorResponse(USER_NOT_FOUND_APP, e.getMessage());
     }
 }
