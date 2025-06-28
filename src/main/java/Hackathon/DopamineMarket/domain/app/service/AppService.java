@@ -2,7 +2,8 @@ package Hackathon.DopamineMarket.domain.app.service;
 
 import Hackathon.DopamineMarket.domain.app.domain.App;
 import Hackathon.DopamineMarket.domain.app.dto.request.PostAppCreateRequest;
-import Hackathon.DopamineMarket.domain.app.dto.response.AppListResponse;
+import Hackathon.DopamineMarket.domain.app.dto.response.GetAppListResponse;
+import Hackathon.DopamineMarket.domain.app.dto.response.PostAppCreateResponse;
 import Hackathon.DopamineMarket.domain.app.exception.AppAlreadyExistsException;
 import Hackathon.DopamineMarket.domain.app.exception.AppNameRequiredException;
 import Hackathon.DopamineMarket.domain.app.exception.UserNotFoundException;
@@ -12,6 +13,9 @@ import Hackathon.DopamineMarket.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import Hackathon.DopamineMarket.domain.app.dto.response.AppItem;
+
+import java.util.List;
 
 import static Hackathon.DopamineMarket.global.response.status.BaseExceptionResponseStatus.*;
 
@@ -23,7 +27,7 @@ public class AppService {
     private final UserRepository userRepository;
 
     @Transactional
-    public AppListResponse createApp(PostAppCreateRequest request) {
+    public PostAppCreateResponse createApp(PostAppCreateRequest request) {
         User user = userRepository.findById(request.userId())
                 .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
 
@@ -52,7 +56,7 @@ public class AppService {
 
         appRepository.save(app);
 
-        return AppListResponse.of(
+        return PostAppCreateResponse.of(
                 app.getAppId(),
                 app.getAppName(),
                 app.getUrl(),
@@ -60,4 +64,25 @@ public class AppService {
                 app.getIsLocked()
         );
     }
+
+    public GetAppListResponse getApps(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
+
+        List<App> apps = appRepository.findAllByUser(user);
+
+        List<AppItem> result = apps.stream()
+                .map(app -> new AppItem(
+                        app.getAppId(),
+                        app.getAppName(),
+                        app.getUrl(),
+                        app.getCoinRequired(),
+                        Boolean.TRUE.equals(app.getIsLocked())
+                ))
+                .toList();
+
+        return GetAppListResponse.of(result);
+    }
+
+
 }
