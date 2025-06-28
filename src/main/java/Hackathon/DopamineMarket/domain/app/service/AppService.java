@@ -74,14 +74,19 @@ public class AppService {
 
         List<App> apps = appRepository.findAllByUser(user);
 
+        int userCoin = user.getCoin();
+
         List<AppItem> result = apps.stream()
-                .map(app -> new AppItem(
-                        app.getAppId(),
-                        app.getAppName(),
-                        app.getUrl(),
-                        app.getCoinRequired(),
-                        Boolean.TRUE.equals(app.getIsLocked())
-                ))
+                .map(app -> {
+                    boolean isLocked = userCoin < app.getCoinRequired();
+                    return new AppItem(
+                            app.getAppId(),
+                            app.getAppName(),
+                            app.getUrl(),
+                            app.getCoinRequired(),
+                            isLocked
+                    );
+                })
                 .toList();
 
         return GetAppListResponse.of(result);
@@ -109,5 +114,5 @@ public class AppService {
 
         return new PostAppExecuteResponse(app.getUrl());
     }
-
+  
 }

@@ -42,8 +42,9 @@ public class User {
     public void increaseCoin(int amount) {
         this.coin += amount;
     }
+
     public void decreaseCoin(int amount) {
-        this.coin -= amount;
+        this.coin = Math.max(0, this.coin - amount);
     }
 
 }

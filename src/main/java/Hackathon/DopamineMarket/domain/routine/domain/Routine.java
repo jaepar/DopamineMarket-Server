@@ -56,4 +56,9 @@ public class Routine {
     public void complete() {
         this.completed = true;
     }
+
+    public void reset() {
+        this.completed = false;
+        this.createdAt = LocalDateTime.now();
+    }
 }
