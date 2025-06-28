@@ -10,9 +10,15 @@ public enum BaseExceptionResponseStatus implements ResponseStatus {
     INTERNAL_SERVER_ERROR(50000, "서버 내부 오류입니다."),
 
     /**
+     * 60000 : Routine
+     */
+    USER_NOT_FOUND(60000, "존재하지 않는 사용자입니다."),
+    CATEGORY_NOT_FOUND(60001, "유효하지 않는 카테고리입니다."),
+
+    /**
      * 70000: User
      */
-    INVALID_PASSWORD_ERROR(70000, "비밀번호가 올바르지 않습니다."),
+    INVALID_PASSWORD_ERROR(70000, "비밀번호가 올바르지 않습니다.")
 
     ;
 
