@@ -42,4 +42,8 @@ public class User {
     public void increaseCoin(int amount) {
         this.coin += amount;
     }
+    public void decreaseCoin(int amount) {
+        this.coin -= amount;
+    }
+
 }
