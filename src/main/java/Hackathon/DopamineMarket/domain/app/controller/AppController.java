@@ -20,7 +20,7 @@ public class AppController {
     }
 
     @GetMapping
-    public BaseResponse<GetAppListResponse> getAppList(@RequestParam Long userId) {
+    public BaseResponse<GetAppListResponse> getAppList(@RequestParam("userId") Long userId) {
         return BaseResponse.ok(appService.getApps(userId));
     }
 }
