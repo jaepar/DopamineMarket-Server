@@ -27,7 +27,8 @@ public enum BaseExceptionResponseStatus implements ResponseStatus {
     USER_NOT_FOUND_APP(80000, "존재하지 않는 사용자입니다."),
     APP_ALREADY_EXISTS(80001, "이미 동일한 앱이 존재합니다."),
     APP_NAME_REQUIRED(80002, "앱 이름은 필수 입력값입니다."),
-    APP_URL_REQUIRED(80003, "앱 URL은 필수 입력값입니다.")
+    APP_URL_REQUIRED(80003, "앱 URL은 필수 입력값입니다."),
+    INVALID_APP_URL_FORMAT(80004, "앱 URL 형식이 올바르지 않습니다.")
 
     ;
 

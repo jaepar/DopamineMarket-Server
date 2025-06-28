@@ -1,9 +1,6 @@
 package Hackathon.DopamineMarket.domain.app.exception.handler;
 
-import Hackathon.DopamineMarket.domain.app.exception.AppAlreadyExistsException;
-import Hackathon.DopamineMarket.domain.app.exception.AppNameRequiredException;
-import Hackathon.DopamineMarket.domain.app.exception.AppUrlRequiredException;
-import Hackathon.DopamineMarket.domain.app.exception.UserNotFoundException;
+import Hackathon.DopamineMarket.domain.app.exception.*;
 import Hackathon.DopamineMarket.global.response.BaseErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
@@ -45,5 +42,12 @@ public class AppControllerAdvice {
     public BaseErrorResponse handleUserNotFound(UserNotFoundException e) {
         log.error("[UserNotFoundException]", e);
         return new BaseErrorResponse(USER_NOT_FOUND_APP, e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(AppUrlFormatInvalidException.class)
+    public BaseErrorResponse handleInvalidAppUrlFormat(AppUrlFormatInvalidException e) {
+        log.error("[AppUrlFormatInvalidException]", e);
+        return new BaseErrorResponse(INVALID_APP_URL_FORMAT, e.getMessage());
     }
 }
