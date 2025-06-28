@@ -84,9 +84,11 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           port: ${{ secrets.EC2_PORT }}
           script: |
+            set +e
+
             echo "📁 Ensure app directory exists"
             mkdir -p /home/ubuntu/app
-            
+
             echo "🗂️ Move to app directory"
             cd /home/ubuntu/app || {
               echo "❌ Directory not found: /home/ubuntu/app"
