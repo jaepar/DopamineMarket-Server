@@ -3,6 +3,7 @@ package Hackathon.DopamineMarket.domain.routine.domain;
 import Hackathon.DopamineMarket.domain.user.domain.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -43,4 +44,15 @@ public class Routine {
 
     @Column
     private Boolean completed;
+
+    @Builder
+    public Routine(User user, String title, RoutineCategory category, int timer, boolean isDaily, LocalDateTime createdAt) {
+        this.user = user;
+        this.title = title;
+        this.category = category;
+        this.timer = timer;
+        this.isDaily = isDaily;
+        this.createdAt = createdAt;
+        this.completed = false;
+    }
 }
