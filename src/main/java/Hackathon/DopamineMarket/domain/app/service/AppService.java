@@ -2,6 +2,7 @@ package Hackathon.DopamineMarket.domain.app.service;
 
 import Hackathon.DopamineMarket.domain.app.domain.App;
 import Hackathon.DopamineMarket.domain.app.dto.request.PostAppCreateRequest;
+import Hackathon.DopamineMarket.domain.app.dto.response.GetAppListResponse;
 import Hackathon.DopamineMarket.domain.app.dto.response.PostAppCreateResponse;
 import Hackathon.DopamineMarket.domain.app.exception.AppAlreadyExistsException;
 import Hackathon.DopamineMarket.domain.app.exception.AppNameRequiredException;
@@ -12,6 +13,9 @@ import Hackathon.DopamineMarket.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import Hackathon.DopamineMarket.domain.app.dto.response.AppItem;
+
+import java.util.List;
 
 import static Hackathon.DopamineMarket.global.response.status.BaseExceptionResponseStatus.*;
 
@@ -60,4 +64,30 @@ public class AppService {
                 app.getIsLocked()
         );
     }
+
+    public GetAppListResponse getApps(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_APP));
+
+        List<App> apps = appRepository.findAllByUser(user);
+
+        int userCoin = user.getCoin();
+
+        List<AppItem> result = apps.stream()
+                .map(app -> {
+                    boolean isLocked = userCoin < app.getCoinRequired();
+                    return new AppItem(
+                            app.getAppId(),
+                            app.getAppName(),
+                            app.getUrl(),
+                            app.getCoinRequired(),
+                            isLocked
+                    );
+                })
+                .toList();
+
+        return GetAppListResponse.of(result);
+    }
+
+
 }
