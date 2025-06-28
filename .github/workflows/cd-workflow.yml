@@ -93,21 +93,20 @@ jobs:
             cd /home/ubuntu/app || exit 1
 
             echo "🛑 Killing old process if exists"
-            ( pkill -f 'dopamine-market.jar' && echo "🔪 Old process killed" || echo "ℹ️ No process found" )
-
-            echo "⏱️ Waiting up to 5 seconds for process to die"
-            for i in {1..5}; do
-              if pgrep -f 'dopamine-market.jar' > /dev/null; then
-                echo "⏳ Still running..."; sleep 1;
-              else
-                echo "✅ Process gone"; break;
-              fi
-            done
+            PID=$(pgrep -f 'dopamine-market.jar') || true
+            if [ -n "$PID" ]; then
+              kill $PID || true
+              echo "⏱️ Waiting for old process to terminate"
+              while kill -0 $PID 2>/dev/null; do sleep 1; done
+              echo "✅ Old process terminated"
+            else
+              echo "ℹ️ No process found"
+            fi
 
             echo "🚀 Starting new JAR"
             nohup java -jar dopamine-market.jar > log.out 2>&1 &
 
-            echo "✅ Deploy completed"
+            echo "✅ Deploy completed successfully"
             exit 0
 
       - name: ❌ Remove GitHub Actions IP from EC2 Security Group
