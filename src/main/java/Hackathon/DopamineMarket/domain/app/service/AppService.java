@@ -4,6 +4,7 @@ import Hackathon.DopamineMarket.domain.app.domain.App;
 import Hackathon.DopamineMarket.domain.app.dto.request.PostAppCreateRequest;
 import Hackathon.DopamineMarket.domain.app.dto.response.GetAppListResponse;
 import Hackathon.DopamineMarket.domain.app.dto.response.PostAppCreateResponse;
+import Hackathon.DopamineMarket.domain.app.dto.response.PostAppExecuteResponse;
 import Hackathon.DopamineMarket.domain.app.exception.AppAlreadyExistsException;
 import Hackathon.DopamineMarket.domain.app.exception.AppNameRequiredException;
 import Hackathon.DopamineMarket.domain.app.exception.AppNotFoundException;
@@ -91,6 +92,22 @@ public class AppService {
         App app = appRepository.findById(appId)
                 .orElseThrow(() -> new AppNotFoundException(APP_NOT_FOUND));
         appRepository.delete(app);
+    }
+
+    @Transactional
+    public PostAppExecuteResponse executeApp(Long appId) {
+        App app = appRepository.findById(appId)
+                .orElseThrow(() -> new AppNotFoundException(APP_NOT_FOUND));
+
+        User user = app.getUser();
+
+        if (app.getIsLocked()) {
+            return new PostAppExecuteResponse("");
+        }
+
+        user.decreaseCoin(app.getCoinRequired());
+
+        return new PostAppExecuteResponse(app.getUrl());
     }
 
 }
