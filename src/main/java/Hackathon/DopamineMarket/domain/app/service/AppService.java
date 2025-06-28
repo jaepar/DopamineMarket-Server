@@ -29,7 +29,7 @@ public class AppService {
     @Transactional
     public PostAppCreateResponse createApp(PostAppCreateRequest request) {
         User user = userRepository.findById(request.userId())
-                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_APP));
 
         if (request.appName() == null || request.appName().isBlank()) {
             throw new AppNameRequiredException(APP_NAME_REQUIRED);
@@ -67,7 +67,7 @@ public class AppService {
 
     public GetAppListResponse getApps(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_APP));
 
         List<App> apps = appRepository.findAllByUser(user);
 
