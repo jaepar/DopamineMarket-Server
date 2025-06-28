@@ -2,7 +2,7 @@ package Hackathon.DopamineMarket.domain.app.service;
 
 import Hackathon.DopamineMarket.domain.app.domain.App;
 import Hackathon.DopamineMarket.domain.app.dto.request.PostAppCreateRequest;
-import Hackathon.DopamineMarket.domain.app.dto.response.PostAppCreateResponse;
+import Hackathon.DopamineMarket.domain.app.dto.response.AppListResponse;
 import Hackathon.DopamineMarket.domain.app.exception.AppAlreadyExistsException;
 import Hackathon.DopamineMarket.domain.app.exception.AppNameRequiredException;
 import Hackathon.DopamineMarket.domain.app.exception.UserNotFoundException;
@@ -23,7 +23,7 @@ public class AppService {
     private final UserRepository userRepository;
 
     @Transactional
-    public PostAppCreateResponse createApp(PostAppCreateRequest request) {
+    public AppListResponse createApp(PostAppCreateRequest request) {
         User user = userRepository.findById(request.userId())
                 .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
 
@@ -52,7 +52,7 @@ public class AppService {
 
         appRepository.save(app);
 
-        return PostAppCreateResponse.of(
+        return AppListResponse.of(
                 app.getAppId(),
                 app.getAppName(),
                 app.getUrl(),
