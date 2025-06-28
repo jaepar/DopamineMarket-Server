@@ -87,8 +87,18 @@ jobs:
             echo "🗂️ Move to app directory"
             cd /home/ubuntu/app
 
-            echo "🛑 Killing old process (if exists)"
-            pgrep -f 'dopamine-market.jar' && pkill -f 'dopamine-market.jar' && sleep 5
+            echo "🛑 Killing old process if exists"
+            PID=$(pgrep -f 'dopamine-market.jar')
+            if [ -n "$PID" ]; then
+              kill $PID
+              echo "⏱️ Waiting for process to fully terminate..."
+              while kill -0 $PID 2>/dev/null; do
+                sleep 1
+              done
+              echo "✅ Process terminated"
+            else
+              echo "ℹ️ No existing process found"
+            fi
 
             echo "🚀 Starting new JAR"
             nohup java -jar dopamine-market.jar > log.out 2>&1 &
