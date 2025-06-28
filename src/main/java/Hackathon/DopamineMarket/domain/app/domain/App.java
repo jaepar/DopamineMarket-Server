@@ -2,9 +2,9 @@ package Hackathon.DopamineMarket.domain.app.domain;
 
 import Hackathon.DopamineMarket.domain.user.domain.User;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.sql.ConnectionBuilder;
 
 @Entity
 @Table(name = "app")
@@ -31,4 +31,13 @@ public class App {
 
     @Column(name = "is_locked")
     private Boolean isLocked;
+
+    @Builder
+    public App(User user, String appName, String url, int coinRequired, Boolean isLocked) {
+        this.user = user;
+        this.appName = appName;
+        this.url = url;
+        this.coinRequired = coinRequired;
+        this.isLocked = isLocked;
+    }
 }
