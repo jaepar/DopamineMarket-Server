@@ -44,10 +44,19 @@ public class AppControllerAdvice {
         return new BaseErrorResponse(USER_NOT_FOUND_APP, e.getMessage());
     }
 
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(AppUrlFormatInvalidException.class)
     public BaseErrorResponse handleInvalidAppUrlFormat(AppUrlFormatInvalidException e) {
         log.error("[AppUrlFormatInvalidException]", e);
         return new BaseErrorResponse(INVALID_APP_URL_FORMAT, e.getMessage());
     }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(AppNotFoundException.class)
+    public BaseErrorResponse handleAppNotFound(AppNotFoundException e) {
+        log.error("[AppNotFoundException]", e);
+        return new BaseErrorResponse(APP_NOT_FOUND, e.getMessage());
+    }
+
 }
