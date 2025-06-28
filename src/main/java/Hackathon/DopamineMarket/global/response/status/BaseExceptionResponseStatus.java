@@ -14,6 +14,8 @@ public enum BaseExceptionResponseStatus implements ResponseStatus {
      */
     USER_NOT_FOUND(60000, "존재하지 않는 사용자입니다."),
     CATEGORY_NOT_FOUND(60001, "유효하지 않는 카테고리입니다."),
+    ROUTINE_NOT_FOUND(60002, "존재하지 않는 루틴입니다."),
+    ROUTINE_ALREADY_COMPLETED(60003, "이미 완료된 루틴입니다."),
 
     /**
      * 70000: User
