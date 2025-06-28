@@ -39,9 +39,6 @@ public class Routine {
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "start_time")
-    private LocalDateTime startTime;
-
     @Column
     private Boolean completed;
 
