@@ -11,8 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import static Hackathon.DopamineMarket.global.response.status.BaseExceptionResponseStatus.INVALID_PASSWORD_ERROR;
-import static Hackathon.DopamineMarket.global.response.status.BaseExceptionResponseStatus.USER_NOT_FOUND;
+import static Hackathon.DopamineMarket.global.response.status.BaseExceptionResponseStatus.*;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @Slf4j
@@ -30,6 +29,6 @@ public class UserControllerAdvice {
     @ExceptionHandler(UserNotFoundException.class)
     public BaseErrorResponse handleUserNotFound(UserNotFoundException e) {
         log.error("[UserNotFoundException]", e);
-        return new BaseErrorResponse(USER_NOT_FOUND, e.getMessage());
+        return new BaseErrorResponse(USER_NOT_FOUND_USER, e.getMessage());
     }
 }

@@ -12,8 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static Hackathon.DopamineMarket.global.response.status.BaseExceptionResponseStatus.INVALID_PASSWORD_ERROR;
-import static Hackathon.DopamineMarket.global.response.status.BaseExceptionResponseStatus.USER_NOT_FOUND;
+import static Hackathon.DopamineMarket.global.response.status.BaseExceptionResponseStatus.*;
 
 @Service
 @RequiredArgsConstructor
@@ -39,7 +38,7 @@ public class UserService {
 
     public GetUserInfoResponse findUserById(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_USER));
 
         return GetUserInfoResponse.of(user.getNickname(), user.getCoin());
     }
