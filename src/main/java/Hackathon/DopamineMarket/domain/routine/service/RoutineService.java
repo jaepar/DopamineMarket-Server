@@ -71,8 +71,7 @@ public class RoutineService {
                     r.getCategory().name(),
                     r.getTimer(),
                     r.isDaily(),
-                    Boolean.TRUE.equals(r.getCompleted()),
-                    r.getCreatedAt().toString()
+                    Boolean.TRUE.equals(r.getCompleted())
             );
             if (r.isDaily()) {
                 todayOnly.add(item); // 오늘만 수행되는 루틴

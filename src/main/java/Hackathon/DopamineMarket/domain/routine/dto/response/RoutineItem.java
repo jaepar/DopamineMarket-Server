@@ -6,7 +6,6 @@ public record RoutineItem(
         String category,
         int timer,
         boolean isDaily,
-        boolean completed,
-        String startTime
+        boolean completed
 ) {
 }
