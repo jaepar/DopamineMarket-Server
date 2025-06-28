@@ -90,7 +90,7 @@ jobs:
             cd /home/ubuntu/app
 
             echo "🛑 Killing old process"
-            pkill -f 'dopamine-market.jar' || true
+            pkill -f 'dopamine-market.jar' || echo "No existing process"
 
             echo "🚀 Starting new JAR"
             nohup java -jar dopamine-market.jar > log.out 2>&1 &
