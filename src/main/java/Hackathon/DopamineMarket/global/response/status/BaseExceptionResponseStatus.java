@@ -7,7 +7,14 @@ public enum BaseExceptionResponseStatus implements ResponseStatus {
     SUCCESS(20000, "요청에 성공했습니다."),
     BAD_REQUEST(40000, "유효하지 않은 요청입니다."),
     NOT_FOUND(40400, "존재하지 않는 API입니다."),
-    INTERNAL_SERVER_ERROR(50000, "서버 내부 오류입니다.")
+    INTERNAL_SERVER_ERROR(50000, "서버 내부 오류입니다."),
+
+
+    //  80000 : App
+    USER_NOT_FOUND(80000, "존재하지 않는 사용자입니다."),
+    APP_ALREADY_EXISTS(80001, "이미 동일한 앱이 존재합니다."),
+    APP_NAME_REQUIRED(80002, "앱 이름은 필수 입력값입니다."),
+    APP_URL_REQUIRED(80003, "앱 URL은 필수 입력값입니다.")
     ;
 
     private final boolean success = false;

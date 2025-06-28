@@ -4,5 +4,5 @@ import Hackathon.DopamineMarket.domain.app.domain.App;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AppRepository extends JpaRepository<App, Long> {
-
+    boolean existsByUserIdAndAppName(Long userId, String appName);
 }
