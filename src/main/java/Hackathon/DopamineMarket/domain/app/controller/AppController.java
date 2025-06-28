@@ -3,6 +3,7 @@ package Hackathon.DopamineMarket.domain.app.controller;
 import Hackathon.DopamineMarket.domain.app.dto.request.PostAppCreateRequest;
 import Hackathon.DopamineMarket.domain.app.dto.response.GetAppListResponse;
 import Hackathon.DopamineMarket.domain.app.dto.response.PostAppCreateResponse;
+import Hackathon.DopamineMarket.domain.app.dto.response.PostAppExecuteResponse;
 import Hackathon.DopamineMarket.domain.app.service.AppService;
 import Hackathon.DopamineMarket.global.response.BaseResponse;
 import lombok.RequiredArgsConstructor;
@@ -29,4 +30,10 @@ public class AppController {
         appService.deleteApp(appId);
         return BaseResponse.ok(null);
     }
+
+    @PostMapping("/{appId}")
+    public BaseResponse<PostAppExecuteResponse> executeApp(@PathVariable("appId") Long appId) {
+        return BaseResponse.ok(appService.executeApp(appId));
+    }
+
 }
