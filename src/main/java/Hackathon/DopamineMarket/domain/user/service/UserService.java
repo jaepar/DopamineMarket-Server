@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import static Hackathon.DopamineMarket.global.response.status.BaseExceptionResponseStatus.INVALID_PASSWORD_ERROR;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -22,7 +24,7 @@ public class UserService {
         if(byNickname.isPresent()) {
             User user = byNickname.get();
             if(!user.getPassword().equals(loginRequest.getPassword())) {
-                throw new InvalidPasswordException();
+                throw new InvalidPasswordException(INVALID_PASSWORD_ERROR);
             }
             return user;
         }

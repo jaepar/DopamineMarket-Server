@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import static Hackathon.DopamineMarket.global.response.status.BaseExceptionResponseStatus.INVALID_PASSWORD_ERROR;
 
 @Slf4j
-@RestControllerAdvice
+@RestControllerAdvice(basePackages = "Hackathon.DopamineMarket.domain.user")
 public class UserControllerAdvice {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

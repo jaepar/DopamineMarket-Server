@@ -11,8 +11,6 @@ import java.util.List;
 @Entity
 @Table(name = "user")
 @Getter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
     @Id
@@ -27,14 +25,17 @@ public class User {
     private String password;
 
     @Column(name = "coin", nullable = false)
-    @Builder.Default
     private int coin = 0;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @Builder.Default
     private List<Routine> routines = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @Builder.Default
     private List<App> apps = new ArrayList<>();
+
+    @Builder
+    public User(String nickname, String password) {
+        this.nickname = nickname;
+        this.password = password;
+    }
 }
