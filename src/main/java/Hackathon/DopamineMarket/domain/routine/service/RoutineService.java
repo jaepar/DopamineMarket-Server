@@ -15,6 +15,7 @@ import Hackathon.DopamineMarket.domain.user.domain.User;
 import Hackathon.DopamineMarket.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -102,6 +103,25 @@ public class RoutineService {
                 .orElseThrow(() -> new RoutineNotFoundException(ROUTINE_NOT_FOUND));
 
         routineRepository.delete(routine);
+    }
+
+    @Transactional
+    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
+//    @Scheduled(cron = "0 */1 * * * *") // 테스트용
+    public void processDailyRoutines() {
+        List<Routine> allRoutines = routineRepository.findAll();
+
+        for (Routine routine : allRoutines) {
+            if (!Boolean.TRUE.equals(routine.getCompleted())) {
+                routine.getUser().decreaseCoin(1);
+            }
+
+            if (routine.isDaily()) {
+                routineRepository.delete(routine);
+            } else {
+                routine.reset();
+            }
+        }
     }
 
 }
