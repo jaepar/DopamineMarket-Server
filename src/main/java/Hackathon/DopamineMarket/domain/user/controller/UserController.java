@@ -21,7 +21,7 @@ public class UserController {
     }
 
     @GetMapping
-    public BaseResponse<GetUserInfoResponse> getUserById(@RequestParam Long userId) {
+    public BaseResponse<GetUserInfoResponse> getUserById(@RequestParam(name = "userId") Long userId) {
         return BaseResponse.ok(userService.findUserById(userId));
     }
 }
