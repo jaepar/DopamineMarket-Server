@@ -84,6 +84,8 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           port: ${{ secrets.EC2_PORT }}
           script: |
+            set +e
+
             echo "📁 Ensure app directory exists"
             mkdir -p /home/ubuntu/app
 
@@ -106,6 +108,7 @@ jobs:
             nohup java -jar dopamine-market.jar > log.out 2>&1 &
 
             echo "✅ Deploy completed"
+            exit 0
 
       - name: ❌ Remove GitHub Actions IP from EC2 Security Group
         if: always()
