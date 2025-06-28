@@ -52,4 +52,13 @@ public class Routine {
         this.createdAt = createdAt;
         this.completed = false;
     }
+
+    public void complete() {
+        this.completed = true;
+    }
+
+    public void reset() {
+        this.completed = false;
+        this.createdAt = LocalDateTime.now();
+    }
 }

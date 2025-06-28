@@ -29,5 +29,4 @@ public class AppController {
         appService.deleteApp(appId);
         return BaseResponse.ok(null);
     }
-
 }

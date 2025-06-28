@@ -38,4 +38,12 @@ public class User {
         this.nickname = nickname;
         this.password = password;
     }
+
+    public void increaseCoin(int amount) {
+        this.coin += amount;
+    }
+
+    public void decreaseCoin(int amount) {
+        this.coin = Math.max(0, this.coin - amount);
+    }
 }

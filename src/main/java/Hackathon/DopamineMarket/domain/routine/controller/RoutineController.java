@@ -21,8 +21,20 @@ public class RoutineController {
     }
 
     @GetMapping
-    public BaseResponse<GetRoutineListResponse> getRoutineList(@RequestParam Long userId) {
+    public BaseResponse<GetRoutineListResponse> getRoutineList(@RequestParam(name = "userId") Long userId) {
         return BaseResponse.ok(routineService.getRoutines(userId));
+    }
+
+    @PostMapping("/{routineId}/complete")
+    public BaseResponse<Void> completeRoutine(@PathVariable(name = "routineId") Long routineId) {
+        routineService.completeRoutine(routineId);
+        return BaseResponse.ok(null);
+    }
+
+    @DeleteMapping("/{routineId}")
+    public BaseResponse<Void> deleteRoutine(@PathVariable(name = "routineId") Long routineId) {
+        routineService.deleteRoutine(routineId);
+        return BaseResponse.ok(null);
     }
 
 }

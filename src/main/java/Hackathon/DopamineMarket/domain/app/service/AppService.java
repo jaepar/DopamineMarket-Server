@@ -81,6 +81,19 @@ public class AppService {
                         app.getCoinRequired(),
                         Boolean.TRUE.equals(app.getIsLocked())
                 ))
+        int userCoin = user.getCoin();
+
+        List<AppItem> result = apps.stream()
+                .map(app -> {
+                    boolean isLocked = userCoin < app.getCoinRequired();
+                    return new AppItem(
+                            app.getAppId(),
+                            app.getAppName(),
+                            app.getUrl(),
+                            app.getCoinRequired(),
+                            isLocked
+                    );
+                })
                 .toList();
 
         return GetAppListResponse.of(result);
