@@ -87,7 +87,7 @@ jobs:
           port: ${{ secrets.EC2_PORT }}
           script: |
             echo "🗂️ Move to app directory"
-            cd /home/ec2-user/app
+            cd /home/ubuntu/app
 
             echo "🛑 Killing old process"
             pkill -f 'dopamine-market.jar' || true
