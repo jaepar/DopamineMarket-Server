@@ -11,6 +11,7 @@ import Hackathon.DopamineMarket.domain.routine.exception.UserNotFoundException;
 import Hackathon.DopamineMarket.domain.routine.repository.RoutineRepository;
 import Hackathon.DopamineMarket.domain.user.domain.User;
 import Hackathon.DopamineMarket.domain.user.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -79,6 +80,19 @@ public class RoutineService {
         }
 
         return GetRoutineListResponse.of(fixed, todayOnly);
+    }
+
+    @Transactional
+    public void completeRoutine(Long routineId) {
+        Routine routine = routineRepository.findById(routineId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 루틴이 존재하지 않습니다."));
+
+        if (Boolean.TRUE.equals(routine.getCompleted())) {
+            throw new IllegalStateException("이미 완료된 루틴입니다.");
+        }
+
+        routine.complete();
+        routine.getUser().increaseCoin(1);
     }
 
 }
