@@ -69,7 +69,7 @@ public class AppService {
     @Transactional
     public GetAppListResponse getApps(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_APP));
 
         List<App> apps = appRepository.findAllByUser(user);
 
