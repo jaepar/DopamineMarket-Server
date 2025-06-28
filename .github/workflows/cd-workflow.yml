@@ -85,12 +85,15 @@ jobs:
           port: ${{ secrets.EC2_PORT }}
           script: |
             echo "🗂️ Move to app directory"
-            cd /home/ubuntu/app
+            cd /home/ubuntu/app || {
+              echo "❌ Directory not found: /home/ubuntu/app"
+              exit 1
+            }
 
             echo "🛑 Killing old process if exists"
-            PID=$(pgrep -f 'dopamine-market.jar')
+            PID=$(pgrep -f 'dopamine-market.jar') || true
             if [ -n "$PID" ]; then
-              kill $PID
+              kill $PID || true
               echo "⏱️ Waiting for process to fully terminate..."
               while kill -0 $PID 2>/dev/null; do
                 sleep 1
@@ -102,6 +105,9 @@ jobs:
 
             echo "🚀 Starting new JAR"
             nohup java -jar dopamine-market.jar > log.out 2>&1 &
+
+            echo "✅ Deploy completed"
+            exit 0
 
       - name: ❌ Remove GitHub Actions IP from EC2 Security Group
         if: always()
