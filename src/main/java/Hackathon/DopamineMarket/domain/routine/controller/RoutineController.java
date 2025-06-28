@@ -21,7 +21,7 @@ public class RoutineController {
     }
 
     @GetMapping
-    public BaseResponse<GetRoutineListResponse> getRoutineList(@RequestParam(name = "userId") Long userId) {
+    public BaseResponse<GetRoutineListResponse> getRoutineList(@RequestParam Long userId) {
         return BaseResponse.ok(routineService.getRoutines(userId));
     }
 
