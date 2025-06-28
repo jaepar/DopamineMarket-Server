@@ -21,8 +21,7 @@ public class AppController {
     private final AppService appService;
 
     @PostMapping
-    public ResponseEntity<BaseResponse<PostAppCreateResponse>> createApp(@RequestBody PostAppCreateRequest request) {
-        BaseResponse<PostAppCreateResponse> response = BaseResponse.ok(appService.createApp(request));
-        return ResponseEntity.ok(response);
+    public BaseResponse<PostAppCreateResponse>  createApp(@RequestBody PostAppCreateRequest request) {
+        return BaseResponse.ok(appService.createApp(request));
     }
 }

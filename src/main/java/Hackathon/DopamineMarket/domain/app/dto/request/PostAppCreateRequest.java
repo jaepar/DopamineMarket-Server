@@ -1,10 +1,7 @@
 package Hackathon.DopamineMarket.domain.app.dto.request;
 
-import lombok.Getter;
-
-@Getter
-public class PostAppCreateRequest {
-    private Long userId;
-    private String appName;
-    private String url;
-}
+public record PostAppCreateRequest(
+        Long userId,
+        String appName,
+        String url
+) {}

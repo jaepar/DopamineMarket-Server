@@ -24,27 +24,27 @@ public class AppService {
 
     @Transactional
     public PostAppCreateResponse createApp(PostAppCreateRequest request) {
-        User user = userRepository.findById(request.getUserId())
+        User user = userRepository.findById(request.userId())
                 .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
 
-        if (request.getAppName() == null || request.getAppName().isBlank()) {
+        if (request.appName() == null || request.appName().isBlank()) {
             throw new AppNameRequiredException(APP_NAME_REQUIRED);
         }
 
-        if (request.getUrl() == null || request.getUrl().isBlank()) {
+        if (request.url() == null || request.url().isBlank()) {
             throw new AppNameRequiredException(APP_URL_REQUIRED);
         }
 
 
-        boolean exists = appRepository.existsByUserIdAndAppName(user.getUserId(), request.getAppName());
+        boolean exists = appRepository.existsByUserIdAndAppName(user.getUserId(), request.appName());
         if (exists) {
             throw new AppAlreadyExistsException(APP_ALREADY_EXISTS);
         }
 
         App app = App.builder()
                 .user(user)
-                .appName(request.getAppName())
-                .url(request.getUrl())
+                .appName(request.appName())
+                .url(request.url())
                 .coinRequired(3)
                 .isLocked(true)
                 .build();
@@ -52,12 +52,12 @@ public class AppService {
 
         appRepository.save(app);
 
-        return PostAppCreateResponse.builder()
-                .appId(app.getAppId())
-                .appName(app.getAppName())
-                .url(app.getUrl())
-                .coinRequired(app.getCoinRequired())
-                .isLocked(app.getIsLocked())
-                .build();
+        return PostAppCreateResponse.of(
+                app.getAppId(),
+                app.getAppName(),
+                app.getUrl(),
+                app.getCoinRequired(),
+                app.getIsLocked()
+        );
     }
 }

@@ -10,8 +10,6 @@ import java.sql.ConnectionBuilder;
 @Table(name = "app")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
-@AllArgsConstructor
 public class App {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,4 +31,13 @@ public class App {
 
     @Column(name = "is_locked")
     private Boolean isLocked;
+
+    @Builder
+    public App(User user, String appName, String url, int coinRequired, Boolean isLocked) {
+        this.user = user;
+        this.appName = appName;
+        this.url = url;
+        this.coinRequired = coinRequired;
+        this.isLocked = isLocked;
+    }
 }
