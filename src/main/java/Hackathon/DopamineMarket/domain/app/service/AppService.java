@@ -36,7 +36,7 @@ public class AppService {
         }
 
 
-        boolean exists = appRepository.existsByUserIdAndAppName(user.getUserId(), request.appName());
+        boolean exists = appRepository.existsByUserUserIdAndAppName(user.getUserId(), request.appName());
         if (exists) {
             throw new AppAlreadyExistsException(APP_ALREADY_EXISTS);
         }
