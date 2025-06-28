@@ -73,14 +73,6 @@ public class AppService {
 
         List<App> apps = appRepository.findAllByUser(user);
 
-        List<AppItem> result = apps.stream()
-                .map(app -> new AppItem(
-                        app.getAppId(),
-                        app.getAppName(),
-                        app.getUrl(),
-                        app.getCoinRequired(),
-                        Boolean.TRUE.equals(app.getIsLocked())
-                ))
         int userCoin = user.getCoin();
 
         List<AppItem> result = apps.stream()
