@@ -2,15 +2,17 @@ package Hackathon.DopamineMarket.domain.user.service;
 
 import Hackathon.DopamineMarket.domain.user.domain.User;
 import Hackathon.DopamineMarket.domain.user.dto.request.PostUserLoginRequest;
+import Hackathon.DopamineMarket.domain.user.dto.response.GetUserInfoResponse;
 import Hackathon.DopamineMarket.domain.user.dto.response.PostUserLoginResponse;
 import Hackathon.DopamineMarket.domain.user.exception.InvalidPasswordException;
+import Hackathon.DopamineMarket.domain.user.exception.UserNotFoundException;
 import Hackathon.DopamineMarket.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static Hackathon.DopamineMarket.global.response.status.BaseExceptionResponseStatus.INVALID_PASSWORD_ERROR;
+import static Hackathon.DopamineMarket.global.response.status.BaseExceptionResponseStatus.*;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +34,13 @@ public class UserService {
 
         User user = signUp(loginRequest.nickname(), loginRequest.password());
         return new PostUserLoginResponse(user.getUserId(), user.getPassword());
+    }
+
+    public GetUserInfoResponse findUserById(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND_USER));
+
+        return GetUserInfoResponse.of(user.getNickname(), user.getCoin());
     }
 
     private User signUp(String nickname, String password) {
