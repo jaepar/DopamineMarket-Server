@@ -31,4 +31,10 @@ public class RoutineController {
         return BaseResponse.ok(null);
     }
 
+    @DeleteMapping("/{routineId}")
+    public BaseResponse<Void> deleteRoutine(@PathVariable(name = "routineId") Long routineId) {
+        routineService.deleteRoutine(routineId);
+        return BaseResponse.ok(null);
+    }
+
 }

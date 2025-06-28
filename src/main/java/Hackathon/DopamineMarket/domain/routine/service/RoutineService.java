@@ -96,4 +96,12 @@ public class RoutineService {
         routine.getUser().increaseCoin(1);
     }
 
+    @Transactional
+    public void deleteRoutine(Long routineId) {
+        Routine routine = routineRepository.findById(routineId)
+                .orElseThrow(() -> new RoutineNotFoundException(ROUTINE_NOT_FOUND));
+
+        routineRepository.delete(routine);
+    }
+
 }
