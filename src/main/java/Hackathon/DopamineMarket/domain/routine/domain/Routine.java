@@ -52,4 +52,8 @@ public class Routine {
         this.createdAt = createdAt;
         this.completed = false;
     }
+
+    public void complete() {
+        this.completed = true;
+    }
 }

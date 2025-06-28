@@ -6,11 +6,14 @@ import Hackathon.DopamineMarket.domain.routine.dto.request.PostRoutineCreateRequ
 import Hackathon.DopamineMarket.domain.routine.dto.response.GetRoutineListResponse;
 import Hackathon.DopamineMarket.domain.routine.dto.response.PostRoutineCreateResponse;
 import Hackathon.DopamineMarket.domain.routine.dto.response.RoutineItem;
+import Hackathon.DopamineMarket.domain.routine.exception.AlreadyCompletedRoutineException;
 import Hackathon.DopamineMarket.domain.routine.exception.InvalidRoutineCategoryException;
+import Hackathon.DopamineMarket.domain.routine.exception.RoutineNotFoundException;
 import Hackathon.DopamineMarket.domain.routine.exception.UserNotFoundException;
 import Hackathon.DopamineMarket.domain.routine.repository.RoutineRepository;
 import Hackathon.DopamineMarket.domain.user.domain.User;
 import Hackathon.DopamineMarket.domain.user.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +21,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static Hackathon.DopamineMarket.global.response.status.BaseExceptionResponseStatus.CATEGORY_NOT_FOUND;
-import static Hackathon.DopamineMarket.global.response.status.BaseExceptionResponseStatus.USER_NOT_FOUND;
+import static Hackathon.DopamineMarket.global.response.status.BaseExceptionResponseStatus.*;
 
 @Service
 @RequiredArgsConstructor
@@ -79,6 +81,19 @@ public class RoutineService {
         }
 
         return GetRoutineListResponse.of(fixed, todayOnly);
+    }
+
+    @Transactional
+    public void completeRoutine(Long routineId) {
+        Routine routine = routineRepository.findById(routineId)
+                .orElseThrow(() -> new RoutineNotFoundException(ROUTINE_NOT_FOUND));
+
+        if (Boolean.TRUE.equals(routine.getCompleted())) {
+            throw new AlreadyCompletedRoutineException(ROUTINE_ALREADY_COMPLETED);
+        }
+
+        routine.complete();
+        routine.getUser().increaseCoin(1);
     }
 
 }
