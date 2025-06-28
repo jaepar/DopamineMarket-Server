@@ -23,4 +23,10 @@ public class AppController {
     public BaseResponse<GetAppListResponse> getAppList(@RequestParam("userId") Long userId) {
         return BaseResponse.ok(appService.getApps(userId));
     }
+
+    @DeleteMapping("/{appId}")
+    public BaseResponse<Void> deleteApp(@PathVariable("appId") Long appId) {
+        appService.deleteApp(appId);
+        return BaseResponse.ok(null);
+    }
 }
