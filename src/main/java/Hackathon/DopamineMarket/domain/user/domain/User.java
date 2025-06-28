@@ -3,9 +3,7 @@ package Hackathon.DopamineMarket.domain.user.domain;
 import Hackathon.DopamineMarket.domain.app.domain.App;
 import Hackathon.DopamineMarket.domain.routine.domain.Routine;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,4 +32,10 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<App> apps = new ArrayList<>();
+
+    @Builder
+    public User(String nickname, String password) {
+        this.nickname = nickname;
+        this.password = password;
+    }
 }
