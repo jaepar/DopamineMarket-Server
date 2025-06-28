@@ -38,4 +38,8 @@ public class User {
         this.nickname = nickname;
         this.password = password;
     }
+
+    public void increaseCoin(int amount) {
+        this.coin += amount;
+    }
 }

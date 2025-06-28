@@ -14,13 +14,16 @@ public enum BaseExceptionResponseStatus implements ResponseStatus {
      */
     USER_NOT_FOUND(60000, "존재하지 않는 사용자입니다."),
     CATEGORY_NOT_FOUND(60001, "유효하지 않는 카테고리입니다."),
+    ROUTINE_NOT_FOUND(60002, "존재하지 않는 루틴입니다."),
+    ROUTINE_ALREADY_COMPLETED(60003, "이미 완료된 루틴입니다."),
 
     /**
      * 70000: User
      */
     INVALID_PASSWORD_ERROR(70000, "비밀번호가 올바르지 않습니다."),
-  
-  //  80000 : App
+    USER_NOT_FOUND_USER(70001, "존재하지 않는 사용자입니다."),
+
+    //  80000 : App
     USER_NOT_FOUND_APP(80000, "존재하지 않는 사용자입니다."),
     APP_ALREADY_EXISTS(80001, "이미 동일한 앱이 존재합니다."),
     APP_NAME_REQUIRED(80002, "앱 이름은 필수 입력값입니다."),
