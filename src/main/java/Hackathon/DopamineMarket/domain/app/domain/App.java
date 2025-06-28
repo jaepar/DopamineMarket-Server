@@ -2,14 +2,16 @@ package Hackathon.DopamineMarket.domain.app.domain;
 
 import Hackathon.DopamineMarket.domain.user.domain.User;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.sql.ConnectionBuilder;
 
 @Entity
 @Table(name = "app")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor
 public class App {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
