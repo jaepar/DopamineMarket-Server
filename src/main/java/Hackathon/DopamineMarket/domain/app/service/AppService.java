@@ -7,6 +7,7 @@ import Hackathon.DopamineMarket.domain.app.dto.response.PostAppCreateResponse;
 import Hackathon.DopamineMarket.domain.app.dto.response.PostAppExecuteResponse;
 import Hackathon.DopamineMarket.domain.app.exception.AppAlreadyExistsException;
 import Hackathon.DopamineMarket.domain.app.exception.AppNameRequiredException;
+import Hackathon.DopamineMarket.domain.app.exception.AppUrlFormatInvalidException;
 import Hackathon.DopamineMarket.domain.app.exception.AppNotFoundException;
 import Hackathon.DopamineMarket.domain.app.exception.UserNotFoundException;
 import Hackathon.DopamineMarket.domain.app.repository.AppRepository;
@@ -45,6 +46,11 @@ public class AppService {
         boolean exists = appRepository.existsByUserUserIdAndAppName(user.getUserId(), request.appName());
         if (exists) {
             throw new AppAlreadyExistsException(APP_ALREADY_EXISTS);
+        }
+
+        String regex = "^(https?|ftp)://[^\\s/$.?#].[^\\s]*$";
+        if (!request.url().matches(regex)) {
+            throw new AppUrlFormatInvalidException(INVALID_APP_URL_FORMAT);
         }
 
         App app = App.builder()
