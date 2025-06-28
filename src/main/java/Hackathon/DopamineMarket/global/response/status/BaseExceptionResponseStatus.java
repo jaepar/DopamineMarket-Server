@@ -5,9 +5,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum BaseExceptionResponseStatus implements ResponseStatus {
     SUCCESS(20000, "요청에 성공했습니다."),
+
     BAD_REQUEST(40000, "유효하지 않은 요청입니다."),
+    INVALID_PASSWORD_ERROR(40001, "비밀번호가 올바르지 않습니다."),
     NOT_FOUND(40400, "존재하지 않는 API입니다."),
-    INTERNAL_SERVER_ERROR(50000, "서버 내부 오류입니다.")
+    INTERNAL_SERVER_ERROR(50000, "서버 내부 오류입니다."),
+
     ;
 
     private final boolean success = false;
